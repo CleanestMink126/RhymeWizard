@@ -28,19 +28,20 @@ $(document).ready(function(){
     },
     function(data){
         $("body").append(data);
+        // $.post("/setVisited",
+        // {
+        //     url: '{{url}}'
+        // },
+        // function(data){
+        // });
     });
-    $.post("/setVisited",
-    {
-        url: '{{url}}'
-    },
-    function(data){
-    });
+
 });
 
 </script>
 </head>
 
-<title>Hello from Nick</title>
+<title>Rhyme Wizard</title>
 {% if not error %}
 <body style='text-align:center;font-size: 35px;font-weight: 900'>
   <pre>

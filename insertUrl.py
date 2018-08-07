@@ -36,6 +36,7 @@ class databaseConnect:
     def setVisited(self,url):
         self.c.execute("UPDATE urldb SET visited =:visited WHERE url =:url", {"visited" : 1, "url": url})
         self.conn.commit()
+        return "SET RETURN"
 
     def getWord(self,url2, index):
         self.c.execute("SELECT * FROM " + url2 + " WHERE ID =:ID", {"ID": index})
@@ -67,7 +68,7 @@ class databaseConnect:
     def getAllValues(self,url2):
         allVal = []
         for row in self.c.execute('SELECT * FROM ' + url2):
-             print(row)
+            #  print(row)
              allVal.append(list(row))
         return allVal
 

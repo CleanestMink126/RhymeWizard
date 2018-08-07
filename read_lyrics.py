@@ -79,17 +79,17 @@ def knownWord(word):
 
 def find_sim(s1, s2):
     score = 0
-    for i in range(1, 4):
+    for i in range(1, 6):
         if(len(s1) < i or len(s2) < i):
             break
         if(s1[len(s1) - i] == s2[len(s2) - i]):
             score += 100
         if(i > 1):
             if(s1[len(s1) - i] == s2[len(s2) - i + 1]):
-                score += 50
+                score += 75
         if(not len(s2) < i + 1):
             if(s1[len(s1) - i] == s2[len(s2) - i - 1]):
-                score += 50
+                score += 75
     return score
 
 
@@ -126,12 +126,15 @@ def drawOutWords(url):
     html = BeautifulSoup(requests.get(url).text, 'lxml')
     myList = []
     for par in html.find_all('p', 'verse'):  # find the first paragraph
-        myString = par.get_text().replace(",", "").replace(".", "").replace("?", "").replace("\n", " NEWLINE ")
+        myString = par.get_text()
+        myString = re.sub("in'","ing",myString)
+        myString = re.sub('["(),.?!;]','',myString)
+        myString = re.sub('-',' ',myString)
+        myString = re.sub('\n',' NEWLINE ',myString)
         myList += myString.split(" ")
         myList += ["BREAKBREAK"]
     if(len(myList) <= 0):
         return "Invalid URL"
-    print(myList)
     return myList
 
 def drawOutTitle(url):
@@ -147,4 +150,4 @@ if __name__ == '__main__':
     # print(analyze_text("His palms are sweaty, knees weak, arms are heavy. There's vomit on his sweater already, mom's spaghetti"))
     # print(analyze_text("Sometimes I like to walk in the park especially enjoy the fresh air and birds signing. After I go, I feel good"))
 
-    print(rhyme_finder('http://www.metrolyrics.com/ive-got-you-under-my-skin-lyrics-frank-sinatra.html'))
+    print(rhyme_finder('http://www.metrolyrics.com/lose-yourself-lyrics-eminem.html'))
