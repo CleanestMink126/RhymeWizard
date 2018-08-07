@@ -1,0 +1,5 @@
+beautifulsoup4==4.6.0
+Flask==0.12.2
+requests==2.14.2
+pronouncing==0.1.5
+lxml==3.7.3
