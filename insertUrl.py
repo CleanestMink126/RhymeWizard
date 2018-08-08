@@ -31,12 +31,11 @@ class databaseConnect:
         if result == None:
             return None
         else:
-            return result[1] == 1
+            return result[1]
 
-    def setVisited(self,url):
-        self.c.execute("UPDATE urldb SET visited =:visited WHERE url =:url", {"visited" : 1, "url": url})
+    def setVisited(self,url, rhyme_rate):
+        self.c.execute("UPDATE urldb SET visited =:visited WHERE url =:url", {"visited" : rhyme_rate, "url": url})
         self.conn.commit()
-        return "SET RETURN"
 
     def getWord(self,url2, index):
         self.c.execute("SELECT * FROM " + url2 + " WHERE ID =:ID", {"ID": index})
@@ -47,7 +46,7 @@ class databaseConnect:
 
     def createBase(self):
         self.c.execute('''CREATE TABLE urldb
-                     (url text, visited INTEGER)''')
+                     (url text, visited FLOAT)''')
         self.conn.commit()
 
     def getColor(self,url2, index):

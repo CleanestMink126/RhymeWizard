@@ -36,7 +36,7 @@ def getReturnFast():
     # if request.method == 'GET':
     # the code below is executed if the request method
     # was GET or the credentials were invalid
-    return render_template('returnFast.html', rr = 100, url = url, error=error)
+    return render_template('returnFast.html', url = url, error=error)
 
 @app.route('/')
 def start_temp():
@@ -48,7 +48,6 @@ def setVisited():
         if(request.form['url'] != ''):
             url = request.form['url']
             mydb = insertUrl.databaseConnect("url.db")
-            mydb.setVisited(url)
         else:
             print('ERROR URL NONE')
     return 'None'
@@ -63,8 +62,9 @@ def getAllWords():
         mydb = insertUrl.databaseConnect("url.db")
         myWords = mydb.getAllValues(title)
         visited = mydb.checkVisited(url)
+        count = mydb.getCount(title)
         if visited:
-            for i in range(mydb.getCount(title)):
+            for i in range(count):
                 mainWord = myWords[i][1]
                 textcolor = ";color:#FFFFFF'>"
                 usedword = mainWord
@@ -80,7 +80,8 @@ def getAllWords():
                     nextElement = '<br><br>'
                 finalAdd += nextElement
         else:
-            for i in range(mydb.getCount(title)):
+            rhyme_num = 0.0
+            for i in range(count):
                 mainWord = myWords[i][1]
                 if(mainWord == 'NEWLINE'):
                     nextElement = '<br>'
@@ -99,7 +100,6 @@ def getAllWords():
                     while (not read_lyrics.knownWord(usedword)) and len(usedword) > 1:
                         usedword = usedword[1:len(usedword)]
                     print('USEDWORD: ' + usedword)
-
                 if read_lyrics.knownWord(usedword):
                     for j in range(1,20):
                         if i+j >= len(myWords):
@@ -114,6 +114,7 @@ def getAllWords():
                             while (not read_lyrics.knownWord(newWord)) and len(newWord) > 1:
                                 newWord = newWord[1:len(newWord)]
                         if(read_lyrics.two_rhyme(usedword, newWord) >= 150):
+                            rhyme_num += 1
                             if(myWords[i][2] == 'NA'):
                                 mydb.setColor(title, i,listColors[0])
                                 mydb.setColor(title, j+i,listColors[0])
@@ -128,6 +129,10 @@ def getAllWords():
                 last = textcolor + mainWord + " </span>"
                 nextElement = "<span style='color: " + color + last
                 finalAdd += nextElement
+            mydb.setVisited(url, 100 * rhyme_num/count)
+            visited = 100 * rhyme_num/count
+        preprend = "<span style='size:60'> Total Rhyme Rate: " + str(round(visited,2)) +" </span><br><br>"
+        finalAdd = preprend + finalAdd
         return finalAdd
 
 if __name__ == '__main__':

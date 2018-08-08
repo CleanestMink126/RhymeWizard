@@ -6,7 +6,7 @@ conn = sqlite3.connect('url.db')
 c = conn.cursor()
 # Create table
 c.execute('''CREATE TABLE urldb
-             (url text, visited INTEGER)''')
+             (url text, visited FLOAT)''')
 # mydb = insertUrl.databaseConnect("url.db")
 # title = read_lyrics.drawOutTitle('http://www.metrolyrics.com/humble-lyrics-kendrick-lamar.html')
 # print(type(mydb.getAllValues(title)[0]))
